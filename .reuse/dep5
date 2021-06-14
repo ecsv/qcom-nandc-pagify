@@ -1,0 +1,8 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: qcom-nandc-pagify
+Upstream-Contact: Sven Eckelmann <sven@narfation.org>
+Source: https://github.com/ecsv/qcom-nandc-pagify
+
+Files: tests/resources/*.bin
+Copyright: Sven Eckelmann <sven@narfation.org>
+License: CC0-1.0

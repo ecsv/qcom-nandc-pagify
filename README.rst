@@ -1,0 +1,139 @@
+.. SPDX-License-Identifier: MIT
+.. SPDX-FileCopyrightText: Sven Eckelmann <sven@narfation.org>
+
+=================
+qcom-nandc-pagify
+=================
+
+About
+=====
+
+The Qualcomm NAND controller takes care of writing and reading pages from
+the actual NAND flash chip. It uses a non-standard page layout which splits
+the data in smaller chunks (sometimes called codewords) and saves these
+chunks with ECC, bad block markers and padding over the data+oob area of the
+nand pages.
+
+The qcom-nandc-pagify can help to convert a raw image (e.g. Linux, rootfs, ...)
+in the page format which is used by the NAND controller. This can then be used
+with a NAND flash programmer to initialize the NAND flash chip.
+
+Known NAND controllers which should work the same way are:
+
+* qcom,ipq806x-nand
+* qcom,ipq4019-nand
+* qcom,ipq6018-nand (tested)
+* qcom,ipq8074-nand (tested)
+* qcom,sdx55-nand
+
+Physical layout
+===============
+
+Page Layout
+-----------
+
+The data which should be saved in a page is split into 516 byte portions. Only
+the last portion is smaller - 510 bytes of 2048 byte large pages and 484 bytes
+for 4096 byte pages. But even the last portion is saved like it would have
+been 516 bytes long. The remaining bytes are simply filled with 0xff.
+
+Each data portion is saved with additional data as chunk in the NAND page.
+
+Usually, there are more bytes in the page then chunks. For example,
+a 2048 bytes page with 128 bytes OOB will be split like this for 4-bit BCH ECC:
+
+* 516 bytes => 528 bytes for chunk in NAND
+* 516 bytes => 528 bytes for chunk in NAND
+* 516 bytes => 528 bytes for chunk in NAND
+* 510 bytes => 528 bytes for chunk in NAND
+
+This would leave 64 bytes of the 2176 bytes (2048 + 128) uninitialized. But
+the remaining bytes in the page can simply filled up with 0xff to make sure
+that the page has the correct size in the converted image.
+
+More information about the page layout can be found in Linux's
+``qcom_nand.c`` under ``qcom_nand_ooblayout_ecc()``
+
+Chunk layout
+------------
+
+A chunk (sometimes called codeword) is a complex structure with
+
+* first data part
+* bad block marker (1 byte on 8x wide bus, 2 byte on 16x wide bus)
+* second data part (+padding)
+* ECC data
+* padding
+
+The first data part and second data part are simply split by a BBM which is
+added to each chunk - even when it is not used at all. The position of this
+BBM is chosen so that the BBM in the last chunk is at the beginning of the
+OOB region of the flash. This means as size for the first data part:
+
+* 2k page, 528 byte chunk: 464
+* 2k page, 532 byte chunk: 452
+* 4k page, 528 byte chunk: 400
+* 4k page, 532 byte chunk: 372
+
+The size of the ECC data on the used algorithm. Following are known
+
+* 4-Bit BCH,  8x bus:  7 bytes ECC
+* 4-Bit BCH, 16x bus:  8 bytes ECC
+* 8-Bit BCH,  8x bus: 13 bytes ECC
+* 8-Bit BCH, 16x bus: 14 bytes ECC
+* RS:                 10 bytes ECC
+
+The chunk is then filled up with 0xff to make sure that it has a predefined
+size. These size itself depends on the ECC algorithm:
+
+* 4-Bit BCH: 528 byte chunk
+* 8-Bit BCH: 532 byte chunk
+* RS:        528 byte chunk
+
+More information about the chunk layout can be found in Linux's
+``qcom_nand.c`` under ``qcom_nandc_read_cw_raw()``.
+
+IPQ806x SBL pages
+-----------------
+
+The pages for the secondary bootloader on the IPQ806x didn't had a codeword
+size of 516 bytes per chunk. Instead the data was written in 512 byte chunks
+with Reed-Solomon ECC. A chunk will use 532 bytes (1 byte BBM, 10 bytes ECC, 5
+bytes padding). The rest of the rules from above still apply.
+
+ECC
+===
+
+BCH
+---
+
+The polynomial used for calculating the data is 8219 or::
+
+  x**13 + x**4 + x**3 + x**1 + 1
+
+RS
+--
+
+The used polynomial for GF(2**10) is 1033 or::
+
+  x ** 10 + x ** 3 + 1
+
+The generator (first consecutive root) is::
+
+  [1, 510, 51, 323, 663, 928, 58, 587, 836]
+
+The data itself is encoded with ``(1015 - chunk_data_size)`` 0 bytes at the
+beginning. The resulting 8 10 bit values are reversed, concatenated to a
+single 80 bits string and split again into 8 bits portions for storage on the
+NAND.
+
+Remarks
+=======
+
+There is currently no official documentation from QCA regarding the NAND
+controller. Only available devices could be used to analyze the NAND content.
+Following features could not yet be tested:
+
+* Reed Solomon ECC
+* 4K pages
+* wide bus mode
