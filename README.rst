@@ -26,6 +26,59 @@ Known NAND controllers which should work the same way are:
 * qcom,ipq8074-nand (tested)
 * qcom,sdx55-nand
 
+
+Usage
+=====
+
+Build
+-----
+
+The package is PEP517 compatible and can be build using python3-build::
+
+  python3 -m build
+
+The generated wheel  then be installed via pip::
+
+  dist/qcom_nandc_pagify_ecsv-*-py3-none-any.whl
+
+But the build is not necessary when all dependencies are already installed
+on the system. Then it is possible to directly run in from the source
+directory::
+
+  python3 -m qcom_nandc_pagify
+
+Unittest
+--------
+
+There are a couple of testcases in ``tests/resources``. The ``in-*`` files
+are converted to the ``out-*`` files with various parameters. These should
+reflect common scenarious. The complete unittest can be run via::
+
+  python3 -m unittest
+
+Converting an image
+-------------------
+
+The arguments are explained as part of the usage help output::
+
+  qcom_nandc_pagify -h
+
+It is necessary specify an input file and the output file + a couple of
+flash dependent parameters::
+
+  # NAND device with 2048+128 large pages with BCH4 (e.g. for Cypress), 8x bus
+  qcom-nandc-pagify --infile $INPUT --outfile $OUTPUT --pagesize 2048 --oobsize 128 --ecc bch4
+
+  # NAND device with 2048+64 large pages with RS (e.g. for IPQ806x), 8x bus
+  qcom-nandc-pagify --infile $INPUT --outfile $OUTPUT --pagesize 2048 --oobsize 64 --ecc rs
+
+  # NAND device with 2048+64 large pages with RS_SBL (e.g. for IPQ806x, SBL partition), 8x bus
+  qcom-nandc-pagify --infile $INPUT --outfile $OUTPUT --pagesize 2048 --oobsize 64 --ecc rs_sbl
+
+  # NAND device with 4096+256 large pages with BCH8 (e.g. Cypress/Hawkeye), 8x bus
+  qcom-nandc-pagify --infile $INPUT --outfile $OUTPUT --pagesize 4096 --oobsize 128 --ecc bch8
+
+
 Physical layout
 ===============
 
