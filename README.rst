@@ -187,6 +187,6 @@ There is currently no official documentation from QCA regarding the NAND
 controller. Only available devices could be used to analyze the NAND content.
 Following features could not yet be tested:
 
-* Reed Solomon ECC
+* Reed Solomon ECC on modern devices
 * 4K pages
 * wide bus mode
