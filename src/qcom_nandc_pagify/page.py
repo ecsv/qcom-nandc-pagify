@@ -38,12 +38,14 @@ class Page:
                              page_size=self.__page_size,
                              widebus=self.__widebus)
 
-    def program(self, data: bytes) -> None:
+    def program(self, data: bytes) -> bytes:
         if len(data) < self.__page_size:
             needed_padding = self.__page_size - len(data)
             data += b'\x00' * needed_padding
 
         self.__data = self.__prepare_qca_page(data)
+
+        return self.__data
 
     def __prepare_qca_page(self, data) -> bytes:
         page_parts = []

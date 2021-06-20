@@ -38,13 +38,15 @@ class Chunk:
 
         self.__bbm_pos = page_size % self.size
 
-    def program(self, codeword: bytes) -> None:
+    def program(self, codeword: bytes) -> bytes:
         # read a full codeword and add necessary padding
         if len(codeword) < self.__codeword_size:
             needed_padding = self.__codeword_size - len(codeword)
             codeword += b'\xff' * needed_padding
 
         self.__data = self.__prepare_qca_chunk(codeword)
+
+        return self.__data
 
     def __prepare_qca_chunk(self, codeword: bytes) -> bytes:
         ecc = self.__ecc_codec.encode(codeword)
