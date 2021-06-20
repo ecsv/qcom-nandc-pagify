@@ -81,7 +81,7 @@ class EccRs(EccMeta):
             raise ValueError('ECC data larger than 1015 bytes')
 
         padded_data = b'\x00' * (1015 - len(data)) + data
-        array_data = [x for x in padded_data]
+        array_data = [int(x) for x in padded_data]
         eccpre = rs.rs_encode_msg(array_data, 8, gen=self.__gen)[1015:]
 
         return self.__10bit_ecc_to_bytes(eccpre)
