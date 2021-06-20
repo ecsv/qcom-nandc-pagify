@@ -10,14 +10,17 @@ from . import EccType
 def ecc_type(astring: str) -> EccType:
     if astring == 'rs':
         return EccType.RS
-    elif astring == 'rs_sbl':
+
+    if astring == 'rs_sbl':
         return EccType.RS_SBL
-    elif astring == 'bch4':
+
+    if astring == 'bch4':
         return EccType.BCH4
-    elif astring == 'bch8':
+
+    if astring == 'bch8':
         return EccType.BCH8
-    else:
-        raise argparse.ArgumentTypeError(f'Unknown type {astring}')
+
+    raise argparse.ArgumentTypeError(f'Unknown type {astring}')
 
 
 def positive_int_type(x: str) -> int:
