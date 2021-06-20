@@ -8,7 +8,7 @@ from . import ECC_Type
 from typing import List
 
 
-def ecc_type(astring):
+def ecc_type(astring: str) -> ECC_Type:
     if astring == 'rs':
         return ECC_Type.RS
     elif astring == 'rs_sbl':
@@ -21,13 +21,14 @@ def ecc_type(astring):
         raise argparse.ArgumentTypeError(f'Unknown type {astring}')
 
 
-def positive_int_type(x):
-    x = int(x)
-    if x <= 0:
+def positive_int_type(x: str) -> int:
+    t = int(x)
+    if t <= 0:
         raise argparse.ArgumentTypeError("Must be larger than 0")
-    return x
+    return t
 
-def parser():
+
+def parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
 
     parser.add_argument('--infile', type=argparse.FileType('rb'),
@@ -47,7 +48,7 @@ def parser():
     return parser
 
 
-def main(args: List[str] = None):
+def main(args: List[str] = None) -> None:
 
     main_parser = parser()
     parsed_args = main_parser.parse_args(args)

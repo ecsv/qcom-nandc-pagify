@@ -3,6 +3,7 @@
 
 import math
 from .chunk import Chunk
+from .ecc import ECC_Meta
 from .ecc import ECC_BCH
 from .ecc import ECC_RS
 from .ecc import ECC_Type
@@ -12,10 +13,11 @@ __all__ = 'Page',
 
 
 class Page:
-    __data = None
+    __data = None  # type: bytes
+    __ecc_codec = None  # type: ECC_Meta
 
-    def __init__(self, page_size=2048, oob_size=64, widebus=False,
-                 ecc=ECC_Type.BCH4):
+    def __init__(self, page_size: int = 2048, oob_size: int = 64,
+                 widebus: bool = False, ecc=ECC_Type.BCH4) -> None:
         self.__page_size = page_size
         self.__oob_size = oob_size
         self.__widebus = widebus
@@ -36,14 +38,14 @@ class Page:
                              page_size=self.__page_size,
                              widebus=self.__widebus)
 
-    def program(self, data):
+    def program(self, data: bytes) -> None:
         if len(data) < self.__page_size:
             needed_padding = self.__page_size - len(data)
             data += b'\x00' * needed_padding
 
         self.__data = self.__prepare_qca_page(data)
 
-    def __prepare_qca_page(self, data):
+    def __prepare_qca_page(self, data) -> bytes:
         page_parts = []
 
         no_chunks = math.ceil(self.__page_size / self.__chunk.codeword_size)
@@ -67,5 +69,5 @@ class Page:
         return b''.join(page_parts)
 
     @property
-    def data(self):
+    def data(self) -> bytes:
         return self.__data

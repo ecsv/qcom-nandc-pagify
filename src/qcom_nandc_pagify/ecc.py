@@ -2,9 +2,10 @@
 # SPDX-FileCopyrightText: Sven Eckelmann <sven@narfation.org>
 
 import math
-from enum import Enum
 import bchlib
 import reedsolo as rs
+from enum import Enum
+from abc import ABCMeta, abstractmethod
 
 __all__ = (
     'ECC_Type',
@@ -20,32 +21,36 @@ class ECC_Type(Enum):
     BCH8 = 4
 
 
-class ECC_Meta:
-    def encode(self, data):
-        return data
+class ECC_Meta(metaclass=ABCMeta):
+    @abstractmethod
+    def encode(self, data: bytes) -> bytes:
+        pass
 
-    def size(self):
-        return 0
+    @property
+    @abstractmethod
+    def size(self) -> int:
+        pass
 
 
 class ECC_BCH(ECC_Meta):
-    def __init__(self, bits=4):
+    def __init__(self, bits: int = 4) -> None:
         self.__bits = bits
         self.__bch = bchlib.BCH(8219, bits)
 
-    def encode(self, data):
+    def encode(self, data: bytes) -> bytes:
         return self.__bch.encode(data)
 
-    def size(self):
+    @property
+    def size(self) -> int:
         return int(math.ceil(self.__bits * 13 / 8))
 
 
 class ECC_RS(ECC_Meta):
-    def __init__(self):
+    def __init__(self) -> None:
         rs.init_tables(c_exp=10, prim=0x409)
         self.__gen = rs.rs_generator_poly(8, fcr=1)
 
-    def encode(self, data):
+    def encode(self, data: bytes) -> bytes:
         if len(data) > 1015:
             raise ValueError('ECC data larger than 1015 bytes')
 
@@ -75,5 +80,6 @@ class ECC_RS(ECC_Meta):
 
         return bytes(eccbytes)
 
-    def size(self):
+    @property
+    def size(self) -> int:
         return 10
