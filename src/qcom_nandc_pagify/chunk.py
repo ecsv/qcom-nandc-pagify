@@ -1,16 +1,16 @@
 # SPDX-License-Identifier: MIT
 # SPDX-FileCopyrightText: Sven Eckelmann <sven@narfation.org>
 
-from .ecc import ECC_Type, ECC_Meta
+from .ecc import EccType, EccMeta
 
 __all__ = 'Chunk',
 
 
 class Chunk:
     __data = None  # type: bytes
-    __ecc_codec = None  # type: ECC_Meta
+    __ecc_codec = None  # type: EccMeta
 
-    def __init__(self, ecc_codec: ECC_Meta, ecc=ECC_Type.BCH4,
+    def __init__(self, ecc_codec: EccMeta, ecc=EccType.BCH4,
                  page_size: int = 2048, widebus: bool = False) -> None:
         self.__ecc = ecc
         self.__ecc_codec = ecc_codec
@@ -21,16 +21,16 @@ class Chunk:
         else:
             self.__bbm_size = 1
 
-        if self.__ecc == ECC_Type.RS:
+        if self.__ecc == EccType.RS:
             self.__codeword_size = 516
             self.__oob_per_chunk = 12
-        elif self.__ecc == ECC_Type.RS_SBL:
+        elif self.__ecc == EccType.RS_SBL:
             self.__codeword_size = 512
             self.__oob_per_chunk = 16
-        elif self.__ecc == ECC_Type.BCH4:
+        elif self.__ecc == EccType.BCH4:
             self.__codeword_size = 516
             self.__oob_per_chunk = 12
-        elif self.__ecc == ECC_Type.BCH8:
+        elif self.__ecc == EccType.BCH8:
             self.__codeword_size = 516
             self.__oob_per_chunk = 16
         else:

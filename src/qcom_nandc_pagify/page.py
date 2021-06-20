@@ -3,10 +3,10 @@
 
 import math
 from .chunk import Chunk
-from .ecc import ECC_Meta
-from .ecc import ECC_BCH
-from .ecc import ECC_RS
-from .ecc import ECC_Type
+from .ecc import EccMeta
+from .ecc import EccBch
+from .ecc import EccRs
+from .ecc import EccType
 
 
 __all__ = 'Page',
@@ -14,23 +14,23 @@ __all__ = 'Page',
 
 class Page:
     __data = None  # type: bytes
-    __ecc_codec = None  # type: ECC_Meta
+    __ecc_codec = None  # type: EccMeta
 
     def __init__(self, page_size: int = 2048, oob_size: int = 64,
-                 widebus: bool = False, ecc=ECC_Type.BCH4) -> None:
+                 widebus: bool = False, ecc=EccType.BCH4) -> None:
         self.__page_size = page_size
         self.__oob_size = oob_size
         self.__widebus = widebus
         self.__ecc = ecc
 
-        if self.__ecc == ECC_Type.RS:
-            self.__ecc_codec = ECC_RS()
-        elif self.__ecc == ECC_Type.RS_SBL:
-            self.__ecc_codec = ECC_RS()
-        elif self.__ecc == ECC_Type.BCH4:
-            self.__ecc_codec = ECC_BCH(4)
-        elif self.__ecc == ECC_Type.BCH8:
-            self.__ecc_codec = ECC_BCH(8)
+        if self.__ecc == EccType.RS:
+            self.__ecc_codec = EccRs()
+        elif self.__ecc == EccType.RS_SBL:
+            self.__ecc_codec = EccRs()
+        elif self.__ecc == EccType.BCH4:
+            self.__ecc_codec = EccBch(4)
+        elif self.__ecc == EccType.BCH8:
+            self.__ecc_codec = EccBch(8)
         else:
             raise ValueError("ecc invalid")
 

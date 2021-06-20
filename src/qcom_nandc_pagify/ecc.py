@@ -10,20 +10,20 @@ import bchlib
 import reedsolo as rs
 
 __all__ = (
-    'ECC_Type',
-    'ECC_BCH',
-    'ECC_RS',
+    'EccType',
+    'EccBch',
+    'EccRs',
 )
 
 
-class ECC_Type(Enum):
+class EccType(Enum):
     RS = 1
     RS_SBL = 2
     BCH4 = 3
     BCH8 = 4
 
 
-class ECC_Meta(metaclass=ABCMeta):
+class EccMeta(metaclass=ABCMeta):
     @abstractmethod
     def encode(self, data: bytes) -> bytes:
         pass
@@ -34,7 +34,7 @@ class ECC_Meta(metaclass=ABCMeta):
         pass
 
 
-class ECC_BCH(ECC_Meta):
+class EccBch(EccMeta):
     def __init__(self, bits: int = 4) -> None:
         self.__bits = bits
         self.__bch = bchlib.BCH(8219, bits)
@@ -47,7 +47,7 @@ class ECC_BCH(ECC_Meta):
         return int(math.ceil(self.__bits * 13 / 8))
 
 
-class ECC_RS(ECC_Meta):
+class EccRs(EccMeta):
     def __init__(self) -> None:
         rs.init_tables(c_exp=10, prim=0x409)
         self.__gen = rs.rs_generator_poly(8, fcr=1)

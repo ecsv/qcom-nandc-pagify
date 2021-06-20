@@ -4,18 +4,18 @@
 import argparse
 from typing import List
 from . import Page
-from . import ECC_Type
+from . import EccType
 
 
-def ecc_type(astring: str) -> ECC_Type:
+def ecc_type(astring: str) -> EccType:
     if astring == 'rs':
-        return ECC_Type.RS
+        return EccType.RS
     elif astring == 'rs_sbl':
-        return ECC_Type.RS_SBL
+        return EccType.RS_SBL
     elif astring == 'bch4':
-        return ECC_Type.BCH4
+        return EccType.BCH4
     elif astring == 'bch8':
-        return ECC_Type.BCH8
+        return EccType.BCH8
     else:
         raise argparse.ArgumentTypeError(f'Unknown type {astring}')
 
@@ -39,7 +39,7 @@ def parser() -> argparse.ArgumentParser:
                         help='Page size of NAND (without OOB) (default: 2048)')
     parser.add_argument('--oobsize', type=positive_int_type, default=64,
                         help='Number of OOB bytes per page (default: 64)')
-    parser.add_argument('--ecc', type=ecc_type, default=ECC_Type.BCH4,
+    parser.add_argument('--ecc', type=ecc_type, default=EccType.BCH4,
                         help='ECC method used for each chunk [bch4, bch8, rs, rs_sbl] (default: bch4)')
     parser.add_argument('--widebus', action='store_true',
                         default=False,
