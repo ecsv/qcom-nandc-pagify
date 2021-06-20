@@ -23,11 +23,13 @@ def ecc_type(astring: str) -> EccType:
     raise argparse.ArgumentTypeError(f'Unknown type {astring}')
 
 
-def positive_int_type(x: str) -> int:
-    t = int(x)
-    if t <= 0:
+def positive_int_type(intstr: str) -> int:
+    intval = int(intstr)
+
+    if intval <= 0:
         raise argparse.ArgumentTypeError("Must be larger than 0")
-    return t
+
+    return intval
 
 
 def parser() -> argparse.ArgumentParser:
@@ -58,8 +60,8 @@ def main(args: List[str] = None) -> None:
     data_in = parsed_args.infile
     data_out = parsed_args.outfile
 
-    p = Page(page_size=parsed_args.pagesize, oob_size=parsed_args.oobsize,
-             widebus=parsed_args.widebus, ecc=parsed_args.ecc)
+    page = Page(page_size=parsed_args.pagesize, oob_size=parsed_args.oobsize,
+                widebus=parsed_args.widebus, ecc=parsed_args.ecc)
 
     # process input as "page_size" byte pages (+ necessary padding) and write
     # it to as "page_size + oob_size" pages
@@ -68,5 +70,5 @@ def main(args: List[str] = None) -> None:
         if len(data) == 0:
             break
 
-        p.program(data)
-        data_out.write(p.data)
+        page.program(data)
+        data_out.write(page.data)

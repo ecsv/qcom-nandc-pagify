@@ -61,18 +61,18 @@ class EccRs(EccMeta):
             if relpos != 0:
                 pos += 1
 
-            v = 0
+            byte = 0
 
             shift_cur_byte = 2 * relpos
             if shift_cur_byte != 8:
-                v += eccpre[pos] << shift_cur_byte
+                byte += eccpre[pos] << shift_cur_byte
 
             shift_last_byte = 10 - 2 * relpos
             if shift_last_byte != 10:
-                v += eccpre[pos - 1] >> shift_last_byte
+                byte += eccpre[pos - 1] >> shift_last_byte
 
-            v &= 0xff
-            eccbytes.append(v)
+            byte &= 0xff
+            eccbytes.append(byte)
 
         return bytes(eccbytes)
 

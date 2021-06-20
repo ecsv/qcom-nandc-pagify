@@ -216,18 +216,18 @@ class ConfigTestCase(TestCase):
         for config in configs:
             with self.subTest(f'Testing {config}'):
                 fname = f'in-{config.page_size}-{config.raw}.bin'
-                with open(f'tests/resources/{fname}', 'rb') as f:
-                    input_data = f.read()
+                with open(f'tests/resources/{fname}', 'rb') as in_file:
+                    input_data = in_file.read()
 
                 fname = f'out-{config.page_size}-{config.page}-{config.oob_size}oob.bin'
-                with open(f'tests/resources/{fname}', 'rb') as f:
-                    output_data = f.read()
+                with open(f'tests/resources/{fname}', 'rb') as out_file:
+                    output_data = out_file.read()
 
-                p = Page(page_size=config.page_size, oob_size=config.oob_size,
-                         widebus=config.widebus, ecc=config.ecc)
-                p.program(input_data)
+                page = Page(page_size=config.page_size, oob_size=config.oob_size,
+                            widebus=config.widebus, ecc=config.ecc)
+                page.program(input_data)
 
-                self.assertEqual(p.data, output_data)
+                self.assertEqual(page.data, output_data)
 
     def test_page_raise(self):
         configs = [
