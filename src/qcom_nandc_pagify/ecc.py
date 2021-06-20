@@ -1,12 +1,13 @@
 # SPDX-License-Identifier: MIT
 # SPDX-FileCopyrightText: Sven Eckelmann <sven@narfation.org>
 
+from abc import ABCMeta
+from abc import abstractmethod
+from enum import Enum
+from typing import List
 import math
 import bchlib
 import reedsolo as rs
-from enum import Enum
-from abc import ABCMeta, abstractmethod
-from typing import List
 
 __all__ = (
     'ECC_Type',

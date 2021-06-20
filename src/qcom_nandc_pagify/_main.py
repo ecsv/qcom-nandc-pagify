@@ -2,10 +2,9 @@
 # SPDX-FileCopyrightText: Sven Eckelmann <sven@narfation.org>
 
 import argparse
-import sys
+from typing import List
 from . import Page
 from . import ECC_Type
-from typing import List
 
 
 def ecc_type(astring: str) -> ECC_Type:
