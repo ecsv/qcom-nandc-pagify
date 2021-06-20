@@ -6,6 +6,7 @@ import bchlib
 import reedsolo as rs
 from enum import Enum
 from abc import ABCMeta, abstractmethod
+from typing import List
 
 __all__ = (
     'ECC_Type',
@@ -50,14 +51,8 @@ class ECC_RS(ECC_Meta):
         rs.init_tables(c_exp=10, prim=0x409)
         self.__gen = rs.rs_generator_poly(8, fcr=1)
 
-    def encode(self, data: bytes) -> bytes:
-        if len(data) > 1015:
-            raise ValueError('ECC data larger than 1015 bytes')
-
-        padded_data = b'\x00' * (1015 - len(data)) + data
-        array_data = [x for x in padded_data]
-        eccpre = rs.rs_encode_msg(array_data, 8, gen=self.__gen)[1015:]
-
+    @staticmethod
+    def __10bit_ecc_to_bytes(eccpre: List[int]) -> bytes:
         eccbytes = []
         pos = 0
         for i in range(0, 10):
@@ -79,6 +74,16 @@ class ECC_RS(ECC_Meta):
             eccbytes.append(v)
 
         return bytes(eccbytes)
+
+    def encode(self, data: bytes) -> bytes:
+        if len(data) > 1015:
+            raise ValueError('ECC data larger than 1015 bytes')
+
+        padded_data = b'\x00' * (1015 - len(data)) + data
+        array_data = [x for x in padded_data]
+        eccpre = rs.rs_encode_msg(array_data, 8, gen=self.__gen)[1015:]
+
+        return self.__10bit_ecc_to_bytes(eccpre)
 
     @property
     def size(self) -> int:
