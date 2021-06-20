@@ -9,11 +9,11 @@ import math
 import bchlib
 import reedsolo as rs
 
-__all__ = (
+__all__ = [
     'EccType',
     'EccBch',
     'EccRs',
-)
+]
 
 
 class EccType(Enum):

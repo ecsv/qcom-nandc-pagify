@@ -9,7 +9,9 @@ from .ecc import EccRs
 from .ecc import EccType
 
 
-__all__ = 'Page',
+__all__ = [
+    'Page',
+]
 
 
 class Page:

@@ -3,7 +3,9 @@
 
 from .ecc import EccType, EccMeta
 
-__all__ = 'Chunk',
+__all__ = [
+    'Chunk',
+]
 
 
 class Chunk:
