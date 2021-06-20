@@ -33,23 +33,24 @@ def positive_int_type(intstr: str) -> int:
 
 
 def parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser()
+    parser_def = argparse.ArgumentParser()
 
-    parser.add_argument('--infile', type=argparse.FileType('rb'),
-                        required=True, help='Raw image file')
-    parser.add_argument('--outfile', type=argparse.FileType('wb'),
-                        required=True,
-                        help='Output file for image in qcom,nandc page format')
-    parser.add_argument('--pagesize', type=positive_int_type, default=2048,
-                        help='Page size of NAND (without OOB) (default: 2048)')
-    parser.add_argument('--oobsize', type=positive_int_type, default=64,
-                        help='Number of OOB bytes per page (default: 64)')
-    parser.add_argument('--ecc', type=ecc_type, default=EccType.BCH4,
-                        help='ECC method used for each chunk [bch4, bch8, rs, rs_sbl] (default: bch4)')
-    parser.add_argument('--widebus', action='store_true',
-                        default=False,
-                        help='Enable 16x wide bus support')
-    return parser
+    parser_def.add_argument('--infile', type=argparse.FileType('rb'),
+                            required=True, help='Raw image file')
+    parser_def.add_argument('--outfile', type=argparse.FileType('wb'),
+                            required=True,
+                            help='Output file for image in qcom,nandc page format')
+    parser_def.add_argument('--pagesize', type=positive_int_type, default=2048,
+                            help='Page size of NAND (without OOB) (default: 2048)')
+    parser_def.add_argument('--oobsize', type=positive_int_type, default=64,
+                            help='Number of OOB bytes per page (default: 64)')
+    parser_def.add_argument('--ecc', type=ecc_type, default=EccType.BCH4,
+                            help='ECC method used for each chunk [bch4, bch8, rs, rs_sbl] '
+                                 '(default: bch4)')
+    parser_def.add_argument('--widebus', action='store_true',
+                            default=False,
+                            help='Enable 16x wide bus support')
+    return parser_def
 
 
 def main(args: List[str] = None) -> None:
