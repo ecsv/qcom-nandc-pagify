@@ -228,3 +228,25 @@ class ConfigTestCase(TestCase):
                 p.program(input_data)
 
                 self.assertEqual(p.data, output_data)
+
+    def test_page_raise(self):
+        configs = [
+            TestConfig(raw='', page='',
+                       page_size=2048, ecc=ECC_Type.RS_SBL,   oob_size=32),
+            TestConfig(raw='', page='',
+                       page_size=2048, ecc=ECC_Type.RS,   oob_size=32),
+            TestConfig(raw='', page='',
+                       page_size=2048, ecc=ECC_Type.BCH4,   oob_size=32),
+            TestConfig(raw='', page='',
+                       page_size=2048, ecc=ECC_Type.BCH8,   oob_size=64),
+            TestConfig(raw='', page='',
+                       page_size=4096, ecc=ECC_Type.RS,     oob_size=64),
+            TestConfig(raw='', page='',
+                       page_size=4096, ecc=ECC_Type.BCH4,   oob_size=64),
+            TestConfig(raw='', page='',
+                       page_size=4096, ecc=ECC_Type.BCH8,   oob_size=128),
+        ]
+
+        for config in configs:
+            self.assertRaises(ValueError, Page, config.page_size,
+                              config.oob_size, config.widebus, config.ecc)
