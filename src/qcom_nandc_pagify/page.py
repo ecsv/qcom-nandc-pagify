@@ -40,7 +40,7 @@ class Page:
                              page_size=self.__page_size,
                              widebus=self.__widebus)
 
-        no_chunks = math.ceil(self.__page_size / self.__chunk.codeword_size)
+        no_chunks = math.ceil(self.__page_size / self.__chunk.data_size)
         required_size = no_chunks * self.__chunk.size
         if required_size > self.__page_size + self.__oob_size:
             raise ValueError("ECC needs more than available OOB size")
@@ -57,11 +57,11 @@ class Page:
     def __prepare_qca_page(self, data) -> bytes:
         page_parts = []
 
-        # split data in smaller codewords and convert it to chunks
+        # split data in smaller portions and convert it to chunks
         page_size = 0
-        for i in range(0, len(data), self.__chunk.codeword_size):
-            codeword = data[i:i+self.__chunk.codeword_size]
-            self.__chunk.program(codeword)
+        for i in range(0, len(data), self.__chunk.data_size):
+            chunk_data = data[i:i+self.__chunk.data_size]
+            self.__chunk.program(chunk_data)
             page_parts.append(self.__chunk.data)
             page_size += self.__chunk.size
 

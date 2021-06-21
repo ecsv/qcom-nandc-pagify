@@ -10,9 +10,8 @@ About
 
 The Qualcomm NAND controller takes care of writing and reading pages from
 the actual NAND flash chip. It uses a non-standard page layout which splits
-the data in smaller chunks (sometimes called codewords) and saves these
-chunks with ECC, bad block markers and padding over the data+oob area of the
-nand pages.
+the data in smaller partitons and saves these as chunks with ECC, bad block
+markers and padding over the data+oob area of the nand pages.
 
 The qcom-nandc-pagify can help to convert a raw image (e.g. Linux, rootfs, ...)
 in the page format which is used by the NAND controller. This can then be used
@@ -52,7 +51,7 @@ Unittest
 
 There are a couple of testcases in ``tests/resources``. The ``in-*`` files
 are converted to the ``out-*`` files with various parameters. These should
-reflect common scenarious. The complete unittest can be run via::
+reflect common scenarios. The complete unittest can be run via::
 
   python3 -m unittest
 
@@ -110,7 +109,7 @@ More information about the page layout can be found in Linux's
 Chunk layout
 ------------
 
-A chunk (sometimes called codeword) is a complex structure with
+A chunk is a complex structure with
 
 * first data part
 * bad block marker (1 byte on 8x wide bus, 2 byte on 16x wide bus)
@@ -149,7 +148,7 @@ More information about the chunk layout can be found in Linux's
 IPQ806x SBL pages
 -----------------
 
-The pages for the secondary bootloader on the IPQ806x didn't had a codeword
+The pages for the secondary bootloader on the IPQ806x didn't had a data
 size of 516 bytes per chunk. Instead the data was written in 512 byte chunks
 with Reed-Solomon ECC. A chunk will use 532 bytes (1 byte BBM, 10 bytes ECC, 5
 bytes padding). The rest of the rules from above still apply.

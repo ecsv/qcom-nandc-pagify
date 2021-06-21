@@ -24,39 +24,39 @@ class Chunk:
             self.__bbm_size = 1
 
         if self.__ecc == EccType.RS:
-            self.__codeword_size = 516
+            self.__data_size = 516
             self.__oob_per_chunk = 12
         elif self.__ecc == EccType.RS_SBL:
-            self.__codeword_size = 512
+            self.__data_size = 512
             self.__oob_per_chunk = 16
         elif self.__ecc == EccType.BCH4:
-            self.__codeword_size = 516
+            self.__data_size = 516
             self.__oob_per_chunk = 12
         elif self.__ecc == EccType.BCH8:
-            self.__codeword_size = 516
+            self.__data_size = 516
             self.__oob_per_chunk = 16
         else:
             raise ValueError("ecc invalid")
 
         self.__bbm_pos = page_size % self.size
 
-    def program(self, codeword: bytes) -> bytes:
-        # read a full codeword and add necessary padding
-        if len(codeword) < self.__codeword_size:
-            needed_padding = self.__codeword_size - len(codeword)
-            codeword += b'\xff' * needed_padding
+    def program(self, data: bytes) -> bytes:
+        # read a full data portion and add necessary padding
+        if len(data) < self.__data_size:
+            needed_padding = self.__data_size - len(data)
+            data += b'\xff' * needed_padding
 
-        self.__data = self.__prepare_qca_chunk(codeword)
+        self.__data = self.__prepare_qca_chunk(data)
 
         return self.__data
 
-    def __prepare_qca_chunk(self, codeword: bytes) -> bytes:
-        ecc = self.__ecc_codec.encode(codeword)
+    def __prepare_qca_chunk(self, data: bytes) -> bytes:
+        ecc = self.__ecc_codec.encode(data)
 
         chunk_parts = [
-            codeword[0:self.__bbm_pos],
+            data[0:self.__bbm_pos],
             b'\xff' * self.__bbm_size,
-            codeword[self.__bbm_pos:self.__codeword_size],
+            data[self.__bbm_pos:self.__data_size],
             ecc,
             b'\xff' * (self.__oob_per_chunk - len(ecc) - self.__bbm_size),
         ]
@@ -69,11 +69,11 @@ class Chunk:
 
     @property
     def size(self) -> int:
-        return self.__codeword_size + self.__oob_per_chunk
+        return self.__data_size + self.__oob_per_chunk
 
     @property
-    def codeword_size(self) -> int:
-        return self.__codeword_size
+    def data_size(self) -> int:
+        return self.__data_size
 
     @property
     def oob_size(self) -> int:
