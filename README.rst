@@ -104,7 +104,7 @@ the remaining bytes in the page can simply filled up with 0xff to make sure
 that the page has the correct size in the converted image.
 
 More information about the page layout can be found in Linux's
-``qcom_nand.c`` under ``qcom_nand_ooblayout_ecc()``
+``qcom_qcom_nandc.c`` under ``qcom_nand_ooblayout_ecc()``
 
 Chunk layout
 ------------
@@ -143,7 +143,7 @@ size. These size itself depends on the ECC algorithm:
 * RS:        528 byte chunk
 
 More information about the chunk layout can be found in Linux's
-``qcom_nand.c`` under ``qcom_nandc_read_cw_raw()``.
+``qcom_qcom_nandc.c`` under ``qcom_nandc_read_cw_raw()``.
 
 IPQ806x SBL pages
 -----------------
