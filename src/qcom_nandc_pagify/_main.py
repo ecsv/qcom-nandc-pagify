@@ -20,7 +20,7 @@ def ecc_type(astring: str) -> EccType:
     if astring == 'bch8':
         return EccType.BCH8
 
-    raise argparse.ArgumentTypeError(f'Unknown type {astring}')
+    raise argparse.ArgumentTypeError('Unknown type %s' % astring)
 
 
 def positive_int_type(intstr: str) -> int:
