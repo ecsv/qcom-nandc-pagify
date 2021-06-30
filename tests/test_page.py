@@ -1,20 +1,26 @@
 # SPDX-License-Identifier: MIT
 # SPDX-FileCopyrightText: Sven Eckelmann <sven@narfation.org>
 
-from dataclasses import dataclass
 from unittest import TestCase
 from src.qcom_nandc_pagify import Page
 from src.qcom_nandc_pagify import EccType
 
 
-@dataclass
 class TestConfig:
-    raw: str
-    page: str
-    page_size: int
-    oob_size: int
-    ecc: EccType = EccType.BCH4
-    widebus: bool = False  # TODO
+    def __init__(self, raw, page, page_size, oob_size, ecc, widebus = False) -> None:
+        self.raw = raw
+        self.page = page
+        self.page_size = page_size
+        self.oob_size = oob_size
+        self.ecc = ecc
+        self.widebus = widebus
+
+    raw = ''
+    page = ''
+    page_size = 2048
+    oob_size = 64
+    ecc = EccType.BCH4
+    widebus = False  # TODO
 
 
 class ConfigTestCase(TestCase):
@@ -214,13 +220,13 @@ class ConfigTestCase(TestCase):
         ]
 
         for config in configs:
-            with self.subTest(f'Testing {config}'):
-                fname = f'in-{config.page_size}-{config.raw}.bin'
-                with open(f'tests/resources/{fname}', 'rb') as in_file:
+            with self.subTest('Testing %s}' % config):
+                fname = 'in-' + str(config.page_size) + '-' + config.raw + '.bin'
+                with open('tests/resources/' + fname, 'rb') as in_file:
                     input_data = in_file.read()
 
-                fname = f'out-{config.page_size}-{config.page}-{config.oob_size}oob.bin'
-                with open(f'tests/resources/{fname}', 'rb') as out_file:
+                fname = 'out-' + str(config.page_size) + '-' + config.page + '-' + str(config.oob_size )+ 'oob.bin'
+                with open('tests/resources/' + fname, 'rb') as out_file:
                     output_data = out_file.read()
 
                 page = Page(page_size=config.page_size, oob_size=config.oob_size,
