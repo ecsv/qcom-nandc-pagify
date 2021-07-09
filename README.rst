@@ -38,7 +38,7 @@ The package is PEP517 compatible and can be build using python3-build::
 
 The generated wheel  then be installed via pip::
 
-  dist/qcom_nandc_pagify_ecsv-*-py3-none-any.whl
+  dist/qcom_nandc_pagify-*-py3-none-any.whl
 
 But the build is not necessary when all dependencies are already installed
 on the system. Then it is possible to directly run in from the source
