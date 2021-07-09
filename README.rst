@@ -122,10 +122,10 @@ added to each chunk - even when it is not used at all. The position of this
 BBM is chosen so that the BBM in the last chunk is at the beginning of the
 OOB region of the flash. This means as size for the first data part:
 
-* 2k page, 528 byte chunk: 464
-* 2k page, 532 byte chunk: 452
-* 4k page, 528 byte chunk: 400
-* 4k page, 532 byte chunk: 372
+* 2048 bytes page, 528 byte chunk: 464
+* 2048 bytes page, 532 byte chunk: 452
+* 4096 bytes page, 528 byte chunk: 400
+* 4096 bytes page, 532 byte chunk: 372
 
 The size of the ECC data depends on the used algorithm. Following are known
 
