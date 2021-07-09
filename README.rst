@@ -127,7 +127,7 @@ OOB region of the flash. This means as size for the first data part:
 * 4k page, 528 byte chunk: 400
 * 4k page, 532 byte chunk: 372
 
-The size of the ECC data on the used algorithm. Following are known
+The size of the ECC data depends on the used algorithm. Following are known
 
 * 4-Bit BCH,  8x bus:  7 bytes ECC
 * 4-Bit BCH, 16x bus:  8 bytes ECC
