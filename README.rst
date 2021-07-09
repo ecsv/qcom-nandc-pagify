@@ -55,6 +55,18 @@ reflect common scenarios. The complete unittest can be run via::
 
   python3 -m unittest
 
+Installation
+------------
+
+It can be installed using pip
+`from PyPI <https://pypi.org/project/qcom-nandc-pagify/>`_::
+
+  python3 -m pip install --upgrade qcom-nandc-pagify
+
+Or from the the own build wheel (see avove)::
+
+  python3 -m pip install --upgrade dist/qcom_nandc_pagify-*-py3-none-any.whl
+
 Converting an image
 -------------------
 
