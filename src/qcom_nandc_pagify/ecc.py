@@ -37,7 +37,7 @@ class EccMeta(metaclass=ABCMeta):
 class EccBch(EccMeta):
     def __init__(self, bits: int = 4) -> None:
         self.__bits = bits
-        self.__bch = bchlib.BCH(8219, bits)
+        self.__bch = bchlib.BCH(bits, prim_poly=8219)
 
     def encode(self, data: bytes) -> bytes:
         return self.__bch.encode(data)
