@@ -3,4 +3,5 @@
 # SPDX-FileCopyrightText: Sven Eckelmann <sven@narfation.org>
 
 from setuptools import setup
+
 setup()

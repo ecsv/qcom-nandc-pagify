@@ -9,3 +9,38 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
+
+[tool.ruff]
+line-length = 79
+target-version = "py37"
+extend-exclude = [
+    "src/qcom_nandc_pagify/__init__.py",
+]
+
+[tool.ruff.lint]
+select = [
+    "E", # pycodestyle (error)
+    "F", # pyflakes
+    "B", # bugbear
+    "B9",
+    "C4", # flake8-comprehensions
+    "SIM", # flake8-simplify
+    "I", # isort
+    "UP", # pyupgrade
+    "PIE", # flake8-pie
+    "PGH", # pygrep-hooks
+    "PYI", # flake8-pyi
+    "RUF",
+]
+
+ignore = [
+    # only relevant if you run a script with `python -0`,
+    # which seems unlikely for any of the scripts in this repo
+    "B011",
+    # Leave it to the formatter to split long lines and
+    # the judgement of all of us.
+    "E501"
+]
+
+[tool.ruff.format]
+line-ending = "lf"

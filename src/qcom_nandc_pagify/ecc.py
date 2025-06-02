@@ -1,18 +1,18 @@
 # SPDX-License-Identifier: MIT
 # SPDX-FileCopyrightText: Sven Eckelmann <sven@narfation.org>
 
-from abc import ABCMeta
-from abc import abstractmethod
+import math
+from abc import ABCMeta, abstractmethod
 from enum import Enum
 from typing import List
-import math
+
 import bchlib
 import reedsolo as rs
 
 __all__ = [
-    'EccType',
-    'EccBch',
-    'EccRs',
+    "EccBch",
+    "EccRs",
+    "EccType",
 ]
 
 
@@ -44,7 +44,7 @@ class EccBch(EccMeta):
 
     @property
     def size(self) -> int:
-        return int(math.ceil(self.__bits * 13 / 8))
+        return math.ceil(self.__bits * 13 / 8)
 
 
 class EccRs(EccMeta):
@@ -56,7 +56,7 @@ class EccRs(EccMeta):
     def __10bit_ecc_to_bytes(eccpre: List[int]) -> bytes:
         eccbytes = []
         pos = 0
-        for i in range(0, 10):
+        for i in range(10):
             relpos = i % 5
             if relpos != 0:
                 pos += 1
@@ -71,16 +71,16 @@ class EccRs(EccMeta):
             if shift_last_byte != 10:
                 byte += eccpre[pos - 1] >> shift_last_byte
 
-            byte &= 0xff
+            byte &= 0xFF
             eccbytes.append(byte)
 
         return bytes(eccbytes)
 
     def encode(self, data: bytes) -> bytes:
         if len(data) > 1015:
-            raise ValueError('ECC data larger than 1015 bytes')
+            raise ValueError("ECC data larger than 1015 bytes")
 
-        padded_data = b'\x00' * (1015 - len(data)) + data
+        padded_data = b"\x00" * (1015 - len(data)) + data
         array_data = [int(x) for x in padded_data]
         eccpre = rs.rs_encode_msg(array_data, 8, gen=self.__gen)[1015:]
 

@@ -1,10 +1,10 @@
 # SPDX-License-Identifier: MIT
 # SPDX-FileCopyrightText: Sven Eckelmann <sven@narfation.org>
 
-from .ecc import EccType, EccMeta
+from .ecc import EccMeta, EccType
 
 __all__ = [
-    'Chunk',
+    "Chunk",
 ]
 
 
@@ -12,8 +12,13 @@ class Chunk:
     __data = None  # type: bytes
     __ecc_codec = None  # type: EccMeta
 
-    def __init__(self, ecc_codec: EccMeta, ecc=EccType.BCH4,
-                 page_size: int = 2048, widebus: bool = False) -> None:
+    def __init__(
+        self,
+        ecc_codec: EccMeta,
+        ecc=EccType.BCH4,
+        page_size: int = 2048,
+        widebus: bool = False,
+    ) -> None:
         self.__ecc = ecc
         self.__ecc_codec = ecc_codec
         self.__widebus = widebus
@@ -44,7 +49,7 @@ class Chunk:
         # read a full data portion and add necessary padding
         if len(data) < self.__data_size:
             needed_padding = self.__data_size - len(data)
-            data += b'\xff' * needed_padding
+            data += b"\xff" * needed_padding
 
         self.__data = self.__prepare_qca_chunk(data)
 
@@ -54,14 +59,14 @@ class Chunk:
         ecc = self.__ecc_codec.encode(data)
 
         chunk_parts = [
-            data[0:self.__bbm_pos],
-            b'\xff' * self.__bbm_size,
-            data[self.__bbm_pos:self.__data_size],
+            data[0 : self.__bbm_pos],
+            b"\xff" * self.__bbm_size,
+            data[self.__bbm_pos : self.__data_size],
             ecc,
-            b'\xff' * (self.__oob_per_chunk - len(ecc) - self.__bbm_size),
+            b"\xff" * (self.__oob_per_chunk - len(ecc) - self.__bbm_size),
         ]
 
-        return b''.join(chunk_parts)
+        return b"".join(chunk_parts)
 
     @property
     def data(self) -> bytes:
