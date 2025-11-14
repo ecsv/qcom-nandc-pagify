@@ -97,7 +97,7 @@ Page Layout
 -----------
 
 The data which should be saved in a page is split into 516 byte portions. Only
-the last portion is smaller - 510 bytes of 2048 byte large pages and 484 bytes
+the last portion is smaller - 500 bytes for 2048 byte large pages and 484 bytes
 for 4096 byte pages. But even the last portion is saved like it would have
 been 516 bytes long. The remaining bytes are simply filled with 0xff.
 
@@ -109,7 +109,7 @@ a 2048 bytes page with 128 bytes OOB will be split like this for 4-bit BCH ECC:
 * 516 bytes => 528 bytes for chunk in NAND
 * 516 bytes => 528 bytes for chunk in NAND
 * 516 bytes => 528 bytes for chunk in NAND
-* 510 bytes => 528 bytes for chunk in NAND
+* 500 bytes => 528 bytes for chunk in NAND
 
 This would leave 64 bytes of the 2176 bytes (2048 + 128) uninitialized. But
 the remaining bytes in the page can simply filled up with 0xff to make sure
